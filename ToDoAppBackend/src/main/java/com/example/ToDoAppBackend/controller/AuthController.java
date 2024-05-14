@@ -2,7 +2,9 @@ package com.example.ToDoAppBackend.controller;
 
 import com.example.ToDoAppBackend.entity.AuthDTO;
 import com.example.ToDoAppBackend.entity.User;
-import com.example.ToDoAppBackend.service.AuthService;
+import com.example.ToDoAppBackend.auth.AuthService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,11 +42,11 @@ public class AuthController {
                                 userLogin.password()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        User userDetails = (User) authentication.getPrincipal();
+        User user = (User) authentication.getPrincipal();
 
 
         log.info("Token requested for user :{}", authentication.getAuthorities());
-        String token = authService.generateToken(authentication);
+        String token = authService.generateToken(user);
 
         AuthDTO.Response response = new AuthDTO.Response("User logged in successfully", token);
 
@@ -62,5 +65,11 @@ public class AuthController {
         } else {
             return ResponseEntity.badRequest().build();
         }
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(Authentication authentication, HttpServletRequest request, HttpServletResponse response) {
+        new SecurityContextLogoutHandler().logout(request, response, authentication);
+        return ResponseEntity.ok("Pomyslnie wylogowano uzytkownika.");
     }
 }
