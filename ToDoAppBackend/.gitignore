@@ -32,6 +32,5 @@ build/
 ### VS Code ###
 .vscode/
 
-### SECURITY ###
-.env
-.pem
+*.DS_Store
+*.env

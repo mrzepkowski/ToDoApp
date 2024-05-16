@@ -33,6 +33,13 @@ public class User implements Serializable, UserDetails {
     @JsonIgnore
     private String password;
 
+    public User(User user) {
+        this.id = user.id;
+        this.username = user.username;
+        this.email = user.email;
+        this.password = user.password;
+    }
+
     @Override
     public String toString() {
         return "User{" +
