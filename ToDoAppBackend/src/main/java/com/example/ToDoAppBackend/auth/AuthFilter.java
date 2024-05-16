@@ -20,7 +20,7 @@ public class AuthFilter extends OncePerRequestFilter {
     @Autowired
     private AuthService authService;
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

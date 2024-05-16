@@ -1,8 +1,6 @@
-package com.example.ToDoAppBackend.controller;
+package com.example.ToDoAppBackend.auth;
 
-import com.example.ToDoAppBackend.entity.AuthDTO;
 import com.example.ToDoAppBackend.entity.User;
-import com.example.ToDoAppBackend.auth.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;

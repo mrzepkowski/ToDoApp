@@ -11,7 +11,6 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import io.github.cdimascio.dotenv.Dotenv;
 
 import java.security.Key;
 import java.util.Date;
@@ -27,7 +26,7 @@ public class AuthService {
 
     @PostConstruct
     public void init() {
-        SECRET_KEY = Dotenv.load().get("SECRET_KEY");
+        SECRET_KEY = System.getenv("SECRET_KEY");
     }
 
     public String extractUsername(String token) throws Exception {

@@ -1,4 +1,4 @@
-package com.example.ToDoAppBackend.entity;
+package com.example.ToDoAppBackend.auth;
 
 public class AuthDTO {
     public record LoginRequest(String username, String password) {
