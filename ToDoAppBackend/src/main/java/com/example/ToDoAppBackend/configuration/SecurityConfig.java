@@ -22,7 +22,7 @@ import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-public class SecurityConfig /* extends WebSecurityConfigurerAdapter */{
+public class SecurityConfig {
     @Autowired
     private AuthFilter authFilter;
     @Autowired
