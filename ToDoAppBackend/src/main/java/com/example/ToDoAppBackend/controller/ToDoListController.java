@@ -4,14 +4,9 @@ import com.example.ToDoAppBackend.entity.ToDoList;
 import com.example.ToDoAppBackend.service.ToDoListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/todolists")
@@ -55,9 +50,9 @@ public class ToDoListController {
     @PatchMapping("/{username}/{id}/changeTitle")
     @PreAuthorize("authentication.name == #username")
     public ResponseEntity<?> changeToDoListTitle(@PathVariable String username, @PathVariable Integer id, @RequestBody String newTitle) {
-        int nRowsUpdated = toDoListService.modifyToDoListTitleById(newTitle, id); //number of rows being updated
+        int nRowsUpdated = toDoListService.modifyTitleByIdAndUsername(newTitle, id, username); //number of rows being updated
         if (nRowsUpdated > 0) {
-            return new ResponseEntity<>("Title updated.", HttpStatus.OK);
+            return ResponseEntity.ok("Title updated.");
         } else {
             return new ResponseEntity<>("To-do list not found.", HttpStatus.NOT_FOUND);
         }
@@ -66,7 +61,10 @@ public class ToDoListController {
     @DeleteMapping("/{username}/{id}/delete")
     @PreAuthorize("authentication.name == #username")
     public ResponseEntity<?> deleteToDoList(@PathVariable String username, @PathVariable Integer id) {
-        toDoListService.removeToDoListById(id);
-        return ResponseEntity.ok("To-do list removed.");
+        if (toDoListService.removeToDoListById(id, username) == 1) {
+            return ResponseEntity.ok("To-do list removed.");
+        } else {
+            return new ResponseEntity<>("Invalid id", HttpStatus.NOT_FOUND);
+        }
     }
 }

@@ -32,11 +32,11 @@ public class ToDoListService {
         return toDoListRepository.saveAndFlush(toDoList);
     }
 
-    public int modifyToDoListTitleById(String newTitle, Integer id) {
-        return toDoListRepository.setToDoListTitleById(newTitle, id);
+    public int modifyTitleByIdAndUsername(String newTitle, Integer id, String username) {
+        return toDoListRepository.setTitleByIdAndUsername(newTitle, id, username);
     }
 
-    public void removeToDoListById(Integer id) {
-        toDoListRepository.deleteById(id);
+    public int removeToDoListById(Integer id, String username) {
+        return toDoListRepository.deleteByIdAndUsername(id, username);
     }
 }

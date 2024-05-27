@@ -13,8 +13,13 @@ public interface ToDoListRepository extends JpaRepository<ToDoList, Integer> {
     public List<ToDoList> findAllByUsernameAndColorId(String username, Integer colorId);
 
     @Modifying
-    @Query("update users u set u.title = ?1 where u.id = ?2")
-    public int setToDoListTitleById(String newTitle, Integer id); //returns number of records being updated
+    @Query("update to_do_lists td join users u on td.user_id = users.id " +
+            "set td.title = ?1 where td.id = ?2 and td.username = ?3")
+    public int setTitleByIdAndUsername(String newTitle, Integer id, String username); //returns a number of records being updated
 
-    void deleteById(Integer id);
+    @Modifying
+    @Query("delete from to_do_lists td join " +
+            "users u on td.user_id = u.id " +
+            "where td.id = ?1 and td.username = ?2")
+    public int deleteByIdAndUsername(Integer id, String username); //returns a number of deleted records
 }
