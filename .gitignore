@@ -11,10 +11,10 @@
 .sts4-cache
 
 ### IntelliJ IDEA ###
-.idea
+**/.idea/
 *.iws
 *.iml
 *.ipr
 
 ### VS Code ###
-.vscode/
+**/.vscode/
