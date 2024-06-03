@@ -24,7 +24,7 @@ public class ToDoItem implements Serializable {
     private String content;
 
     @ManyToOne
-    private ToDoList taskList;
+    private ToDoList toDoList;
 
     private boolean isStarred = false;
 

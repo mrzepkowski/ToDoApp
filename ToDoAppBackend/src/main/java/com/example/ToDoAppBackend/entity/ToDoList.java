@@ -26,7 +26,7 @@ public class ToDoList implements Serializable {
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "userId", referencedColumnName = "id")
     private User user;
 
     @NotNull
