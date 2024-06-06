@@ -75,7 +75,6 @@ public class ToDoListController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("authentication.name == #username")
     public ResponseEntity<?> delete(@PathVariable(name = "id") Long id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();

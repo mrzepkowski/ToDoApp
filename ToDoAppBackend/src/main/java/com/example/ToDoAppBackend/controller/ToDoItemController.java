@@ -11,7 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/todoitems")
+@RequestMapping("/api/v1/todoitems")
 public class ToDoItemController {
     @Autowired
     private ToDoItemService toDoItemService;

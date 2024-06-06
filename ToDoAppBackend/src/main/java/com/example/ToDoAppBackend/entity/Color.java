@@ -17,8 +17,7 @@ import java.io.Serializable;
 @Table(name = "Colors")
 public class Color implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(unique = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
     private Long id;
 

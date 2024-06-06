@@ -48,12 +48,10 @@ public class AuthFilter extends OncePerRequestFilter {
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
-
             }
-
-            filterChain.doFilter(request, response);
         } else {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
+        filterChain.doFilter(request, response);
     }
 }
