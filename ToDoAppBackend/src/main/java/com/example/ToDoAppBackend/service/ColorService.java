@@ -23,7 +23,7 @@ public class ColorService {
                 .orElseThrow(() -> new EntityNotFoundException("Color not found"));
     }
 
-    public Color loadById(Integer id) {
+    public Color loadById(Long id) {
         return colorRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Color not found"));
     }

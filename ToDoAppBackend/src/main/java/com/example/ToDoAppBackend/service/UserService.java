@@ -3,7 +3,6 @@ package com.example.ToDoAppBackend.service;
 import com.example.ToDoAppBackend.dto.UserDTO;
 import com.example.ToDoAppBackend.entity.User;
 import com.example.ToDoAppBackend.repository.UserRepository;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -22,9 +21,6 @@ public class UserService implements UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private ModelMapper modelMapper;
-
     public List<User> loadAllUsers() {
         return userRepository.findAll();
     }
@@ -37,7 +33,7 @@ public class UserService implements UserDetailsService {
 
     public UserDTO.Response loadUserDataByUsername(String username) {
         User user = loadUserByUsername(username);
-        UserDTO.Response response = modelMapper.map(user, UserDTO.Response.class);
+        UserDTO.Response response = new UserDTO.Response(user.getUsername(), user.getEmail());
         return response;
     }
 
@@ -53,7 +49,7 @@ public class UserService implements UserDetailsService {
 
         user.setEmail(request.newEmail());
         User savedUser = userRepository.save(user);
-        UserDTO.Response response = modelMapper.map(savedUser, UserDTO.Response.class);
+        UserDTO.Response response = new UserDTO.Response(user.getUsername(), user.getEmail());
         return response;
     }
 
@@ -66,7 +62,7 @@ public class UserService implements UserDetailsService {
 
         user.setPassword(passwordEncoder.encode(newPassword));
         User savedUser = userRepository.save(user);
-        UserDTO.Response response = modelMapper.map(savedUser, UserDTO.Response.class);
+        UserDTO.Response response = new UserDTO.Response(user.getUsername(), user.getEmail());
         return response;
     }
 }
