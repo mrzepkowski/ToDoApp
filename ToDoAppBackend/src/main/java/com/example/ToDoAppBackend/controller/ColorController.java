@@ -5,13 +5,10 @@ import com.example.ToDoAppBackend.service.ColorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/colors")
+@RequestMapping("/api/v1/colors")
 public class ColorController {
     @Autowired
     ColorService colorService;
@@ -22,13 +19,13 @@ public class ColorController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getColorById(@PathVariable Integer id) {
+    public ResponseEntity<?> getColorById(@PathVariable(name = "id") Long id) {
         Color color = colorService.loadById(id);
         return new ResponseEntity<>(color, HttpStatus.OK);
     }
 
-    @GetMapping("/{colorName}")
-    public ResponseEntity<?> getColorByName(@PathVariable String colorName) {
+    @GetMapping("/by-name/{color-name}")
+    public ResponseEntity<?> getColorByName(@PathVariable(name = "color-name") String colorName) {
         Color color = colorService.loadByName(colorName);
         return new ResponseEntity<>(color, HttpStatus.OK);
     }

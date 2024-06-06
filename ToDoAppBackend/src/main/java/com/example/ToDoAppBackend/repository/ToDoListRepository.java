@@ -6,10 +6,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface ToDoListRepository extends JpaRepository<ToDoList, Integer> {
-    public List<ToDoList> findAllByUsername(String username);
+public interface ToDoListRepository extends JpaRepository<ToDoList, Long> {
+    public List<ToDoList> findAllByuserUsername(String username);
 
-    public Optional<ToDoList> findByUsernameAndId(String username, Integer id);
+    public Optional<ToDoList> findByuserUsernameAndId(String username, Long id);
 
-    public List<ToDoList> findAllByUsernameAndColorId(String username, Integer colorId);
+    public List<ToDoList> findAllByuserUsernameAndColorId(String username, Long colorId);
 }

@@ -26,15 +26,15 @@ public class ToDoListService {
     private ColorRepository colorRepository;
 
     public List<ToDoList> loadAllByUsername(String username) {
-        return toDoListRepository.findAllByUsername(username);
+        return toDoListRepository.findAllByuserUsername(username);
     }
 
-    public List<ToDoList> loadAllByUsernameAndColorId(String username, Integer colorId) {
-        return toDoListRepository.findAllByUsernameAndColorId(username, colorId);
+    public List<ToDoList> loadAllByUsernameAndColorId(String username, Long colorId) {
+        return toDoListRepository.findAllByuserUsernameAndColorId(username, colorId);
     }
 
-    public ToDoList loadByUsernameAndId(String username, Integer id) {
-        return toDoListRepository.findByUsernameAndId(username, id)
+    public ToDoList loadByUsernameAndId(String username, Long id) {
+        return toDoListRepository.findByuserUsernameAndId(username, id)
                 .orElseThrow(() -> new EntityNotFoundException("To-do list not found"));
     }
 
@@ -52,8 +52,8 @@ public class ToDoListService {
         return toDoListRepository.save(toDoList);
     }
 
-    public ToDoList modifyByUsernameAndId(String username, Integer id, ToDoListDTO.Request request) {
-        ToDoList toDoList = toDoListRepository.findByUsernameAndId(username, id)
+    public ToDoList modifyByUsernameAndId(String username, Long id, ToDoListDTO.Request request) {
+        ToDoList toDoList = toDoListRepository.findByuserUsernameAndId(username, id)
                 .orElseThrow(() -> new EntityNotFoundException("To-do list not found"));
 
         if (request.title() != null)
@@ -68,8 +68,8 @@ public class ToDoListService {
         return toDoListRepository.save(toDoList);
     }
 
-    public void removeByUsernameAndId(String username, Integer id) {
-        ToDoList toDoList = toDoListRepository.findByUsernameAndId(username, id)
+    public void removeByUsernameAndId(String username, Long id) {
+        ToDoList toDoList = toDoListRepository.findByuserUsernameAndId(username, id)
                 .orElseThrow(() -> new EntityNotFoundException("To-do list not found"));
         toDoListRepository.delete(toDoList);
     }

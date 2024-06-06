@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.io.Serializable;
 
@@ -18,23 +20,30 @@ public class ToDoItem implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(unique = true)
-    private Integer id;
+    private Long id;
 
     @Column(nullable = false)
     private String content;
 
     @ManyToOne
+    @JoinColumn(name = "toDoListId", referencedColumnName = "id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private ToDoList toDoList;
 
-    private boolean isStarred = false;
+    @Column(nullable = false)
+    private String username;
 
-    private boolean isCompleted = false;
+    @Column(nullable = false)
+    private boolean starred;
+
+    @Column(nullable = false)
+    private boolean completed;
 
     private String deadline;
 
-    public ToDoItem(int id, String content, String deadline) {
-        this.id = id;
-        this.content = content;
-        this.deadline = deadline;
+    @PrePersist
+    void setOwnerUsernameBeforeInsert() {
+        starred = false;
+        completed = false;
     }
 }

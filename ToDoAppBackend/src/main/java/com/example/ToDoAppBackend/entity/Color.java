@@ -20,7 +20,7 @@ public class Color implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(unique = true)
     @JsonIgnore
-    private Integer id;
+    private Long id;
 
     @Column(nullable = false)
     private String hexValue;
