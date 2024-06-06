@@ -1,6 +1,3 @@
-WARNING<br>
-API is still in development phase, use at your own risk and report any issues.<br>
-<br>
 <h2>Description</h2>
 To-do app is an application that allows user to manage their to-do items. The main goal of this project<br>
 is to create an user-friendly tool that makes it easier to plan and manage their activities. For this<br>
