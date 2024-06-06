@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,6 +32,9 @@ public class AuthController {
     private AuthService authService;
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private TokenBlackList tokenBlackList;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthDTO.LoginRequest userLogin) throws IllegalAccessException {
@@ -52,22 +57,16 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody AuthDTO.RegisterRequest userRegister) {
-        User user = new User();
-        user.setUsername(userRegister.username());
-        user.setEmail(userRegister.email());
-        user.setPassword(new BCryptPasswordEncoder().encode(userRegister.password()));
-
-        if (authService.createUser(user)) {
-            return ResponseEntity.accepted().build();
-        } else {
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<?> register(@RequestBody AuthDTO.RegisterRequest request) {
+        log.info("Register request ( username: " + request.username() + ", email: " + request.email() + " )");
+        AuthDTO.RegisterResponse response = authService.createUser(request);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(Authentication authentication, HttpServletRequest request, HttpServletResponse response) {
-        new SecurityContextLogoutHandler().logout(request, response, authentication);
-        return ResponseEntity.ok("Pomyslnie wylogowano uzytkownika.");
+    public ResponseEntity<?> logout(HttpServletRequest request) {
+        String token = authService.extractTokenFromRequest(request);
+        tokenBlackList.addToBlackList(token);
+        return ResponseEntity.ok("Logged out succcesfully");
     }
 }

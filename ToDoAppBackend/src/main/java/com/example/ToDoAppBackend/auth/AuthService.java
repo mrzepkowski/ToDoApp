@@ -8,9 +8,17 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Key;
 import java.util.Date;
@@ -21,8 +29,15 @@ import java.util.function.Function;
 @Service
 public class AuthService {
     private String SECRET_KEY;
+
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private TokenBlackList tokenBlackList;
 
     @PostConstruct
     public void init() {
@@ -37,14 +52,18 @@ public class AuthService {
         return generateToken(new HashMap<>(), userDetails);
     }
 
-    public boolean createUser(User user) {
-        if (!userRepository.existsByUsername(user.getUsername()) &&
-                !userRepository.existsByEmail(user.getEmail()) &&
-                user.getUsername() != null && user.getEmail() != null && user.getPassword() != null) {
-            userRepository.save(user);
-            return true;
-        } else {
-            return false;
+    public AuthDTO.RegisterResponse createUser(AuthDTO.RegisterRequest request) {
+        try {
+            User user = new User();
+            user.setUsername(request.username());
+            user.setEmail(request.email());
+            user.setPassword(passwordEncoder.encode(request.password()));
+
+            User savedUser = userRepository.save(user);
+            AuthDTO.RegisterResponse response = new AuthDTO.RegisterResponse(savedUser.getUsername(), savedUser.getEmail());
+            return response;
+        } catch (DataIntegrityViolationException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This username or email is already taken");
         }
     }
 
@@ -56,6 +75,17 @@ public class AuthService {
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    public String extractTokenFromRequest(HttpServletRequest request) {
+        String authorizationHeader = request.getHeader("Authorization");
+
+        if (StringUtils.hasText(authorizationHeader) && authorizationHeader.startsWith("Bearer ")) {
+            // Extract the JWT token (remove "Bearer " prefix)
+            return authorizationHeader.substring(7);
+        }
+
+        return null;
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) throws Exception {

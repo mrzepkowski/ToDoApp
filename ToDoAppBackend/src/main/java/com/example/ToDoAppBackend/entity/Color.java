@@ -1,5 +1,6 @@
 package com.example.ToDoAppBackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,9 +17,9 @@ import java.io.Serializable;
 @Table(name = "Colors")
 public class Color implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(unique = true)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
+    private Long id;
 
     @Column(nullable = false)
     private String hexValue;
