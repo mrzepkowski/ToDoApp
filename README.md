@@ -20,10 +20,10 @@ purpose, the application is intended to implement the following functionalities:
   <li>Showing to-do items in several forms (sorted by to-do lists):
     <ul>
     <li>On specific to-do list,</li>
-    <li>All to-do's,</li>
-    <li>Today to-do's,</li>
-    <li>Starred to-do's,</li>
-    <li>Completed to-do's</li>
+    <li>All to-do items,</li>
+    <li>To-do items with today deadline</li>
+    <li>Starred to-do items,</li>
+    <li>Completed to-do items</li>
     </ul>
   </li>
 </ul>
