@@ -1,5 +1,5 @@
 <h2>Description</h2>
-To-do app is an application that allows user to manage their to-do items. The main goal of this project<br>
+To-do app is an application that allows user to manage their tasks. The main goal of this project<br>
 is to create an user-friendly tool that makes it easier to plan and manage their activities. For this<br>
 purpose, the application is intended to implement the following functionalities:
 <ul>
